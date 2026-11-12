@@ -1,0 +1,19 @@
+sig Dept {}
+sig User {
+    depts: set Dept,
+    reads: set Doc
+}
+sig Doc {
+    dept: one Dept,
+    owner: one User
+}
+
+fact R1 {
+    all u: User, d: Doc |
+        d in u.reads implies d.owner = u
+}
+pred crossRead[u: User, d: Doc] {
+    d in u.reads
+    d.dept not in u.depts
+}
+run crossRead for 3
